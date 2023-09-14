@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1a1245a5.css",
+    "main.js": "/static/js/main.17f1107f.js",
+    "static/media/doctor-appointment.svg": "/static/media/doctor-appointment.513fc06cae3fe28345d5ed132b90c27e.svg",
+    "static/media/logo.png": "/static/media/logo.01b53930b976e7ef7273.png",
+    "static/media/docImg.png": "/static/media/docImg.09b57e5cae90d598766c.png",
+    "static/media/doctor.avif": "/static/media/doctor.b9fd9f526745d383db3f.avif",
+    "static/media/userImg.jpg": "/static/media/userImg.4c18a9895fa0a5a594b8.jpg",
+    "index.html": "/index.html",
+    "main.1a1245a5.css.map": "/static/css/main.1a1245a5.css.map",
+    "main.17f1107f.js.map": "/static/js/main.17f1107f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a1245a5.css",
+    "static/js/main.17f1107f.js"
+  ]
+}

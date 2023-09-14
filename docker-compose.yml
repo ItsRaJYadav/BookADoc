@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: server
+    container_name: backend
+    working_dir: /usr/src/app
+    networks:
+      - node-network
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./server/.env
+    tty: true
+    ports:
+      - "5500:5500"
+    command: npm run start
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: client
+    container_name: frontend
+    working_dir: /usr/src/app
+    networks:
+      - node-network
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    tty: true
+    ports:
+      - "3000:3000"
+    command: npm run start
+
+  db:
+    container_name: mern-mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: WgCxLbYgqx
+      MYSQL_DATABASE: sql8646121
+      MYSQL_PASSWORD: WgCxLbYgqx
+      MYSQL_USER: sql8646121
+    ports:
+      - "3366:3306"
+    networks:
+      - node-network
+      - mern-network
+
+  nginx:
+    build:
+      context: nginx
+    container_name: nginx
+    restart: always
+    tty: true
+    ports:
+      - "8000:80"
+    networks:
+      - node-network
+    depends_on:
+      - backend
+      - frontend
+
+networks:
+  node-network:
+    driver: bridge
+
+  mern-network:
+    driver: bridge
