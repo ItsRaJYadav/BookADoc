@@ -5,7 +5,7 @@ const Cancel = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <RiCloseCircleLine className="text-red-500 text-6xl mb-4" />
-      <h1 className="text-2xl font-semibold">Appointment Canceled!</h1>
+      <h1 className="text-2xl font-semibold">Payment Canceled! but</h1>
     </div>
   )
 }

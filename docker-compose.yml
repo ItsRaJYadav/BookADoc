@@ -16,7 +16,6 @@ services:
     tty: true
     ports:
       - "5500:5500"
-    command: npm run start
     depends_on:
       - db
 
@@ -33,7 +32,7 @@ services:
     tty: true
     ports:
       - "3000:3000"
-    command: npm run start
+    
 
   db:
     container_name: mern-mysql

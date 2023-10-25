@@ -16,9 +16,10 @@ export function configureSocket(httpServer) {
         });
 
         const messages = chatData.messages || [];
+        const currentTime = new Date().toLocaleString();
 
         // Push the new message to db
-        messages.push({ text: message, senderId });
+        messages.push({ text: message, senderId, time:currentTime });
 
         // Update and save the messages
         chatData.messages = messages;
@@ -63,23 +64,5 @@ export function configureSocket(httpServer) {
       });
     });
     
-
-
-
-    // Handle video call events
-    socket.on('offer', (data) => {
-      // Handle offer and send it to the target peer
-      io.to(data.targetSocketId).emit('offer', data.offer);
-    });
-
-    socket.on('answer', (data) => {
-      // Handle answer and send it to the target peer
-      io.to(data.targetSocketId).emit('answer', data.answer);
-    });
-
-    socket.on('ice-candidate', (data) => {
-      // Handle ICE candidate and send it to the target peer
-      io.to(data.targetSocketId).emit('ice-candidate', data.candidate);
-    });
   });
 }

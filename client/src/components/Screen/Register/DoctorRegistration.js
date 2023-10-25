@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaCheck, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
+import { TailSpin } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 
 const DoctorRegistrationForm = () => {
   const navigator = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     Name: '',
@@ -19,11 +21,10 @@ const DoctorRegistrationForm = () => {
     feesPerConsultation: '',
     timings: '',
     gender: 'male',
-    status: 'Not Available',
     qualifications: '',
     registrationNumber: '',
     hospitalAffiliation: '',
-    languagesSpoken: [],
+    languagesSpoken: '',
     about:""
   });
 
@@ -35,28 +36,30 @@ const DoctorRegistrationForm = () => {
     });
   };
 
-  const handleLanguagesChange = (e) => {
-    const selectedLanguages = Array.from(e.target.selectedOptions, (option) => option.value);
-    setFormData({
-      ...formData,
-      languagesSpoken: selectedLanguages,
-    });
-  };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);
+    setLoading(true);
+
   
     try {
       const response = await axios.post('/api/v1/doc/doctor-registration', formData);
   
       if (response.status === 201) {
+        setLoading(false);
+
         toast.success('Doctor registration successful');
         navigator('/login')
       } else {
+        setLoading(false);
+
         toast.error('Doctor registration failed');
       }
     } catch (error) {
+      setLoading(false);
+
       console.error('An error occurred while registering the doctor:', error);
   
       if (error.response && error.response.status === 409) {
@@ -321,33 +324,38 @@ const DoctorRegistrationForm = () => {
         {/* Languages Spoken */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">Languages Spoken</label>
-          <select
+          <input
             name="languagesSpoken"
-            multiple
+            type="text"
             value={formData.languagesSpoken}
-            onChange={handleLanguagesChange}
+            onChange={handleInputChange}
             className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
           >
-            <option value="english">English</option>
-            <option value="spanish">Hindi</option>
-            <option value="french">Marathi</option>
-            <option value="german">Maithili</option>
-          </select>
+            
+          </input>
         </div>
 
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded mr-2"
-          >
-            <FaCheck className="inline mr-1" /> Register
-          </button>
-          <button
-            type="button"
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
-          >
-            <FaTimes className="inline mr-1" /> Cancel
-          </button>
+        {loading ? (
+           <TailSpin
+           height="80"
+           width="80"
+           color="#4fa94d"
+           ariaLabel="tail-spin-loading"
+           radius="1"
+           wrapperStyle={{}}
+           wrapperClass=""
+           visible={true}
+         />
+          ) : (
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center"
+            >
+              Register
+            </button>
+          )}
+          
         </div>
       </form>
     </div>

@@ -129,7 +129,7 @@ const AllDoctorDetails = () => {
                             <input
                                 type="time"
                                 id="time"
-                                className="w-full px-3 py-2 placeholder-gray-400 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                               className="w-full px-3 py-2 placeholder-gray-400 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
                                 value={selectedTime}
                                 onChange={(e) => setSelectedTime(e.target.value)}
                                 required

@@ -1,20 +1,13 @@
 import express from 'express';
-import { ForgotPassword, OTPLoginController, RegisterUserController, allUsersController, contactFormController, deleteUserController, loginController, updatePassword, verifyUserController } from '../controllers/authController.js';
+import { ForgotPassword, OTPLoginController, RegisterUserController, allUsersController, contactFormController, deleteUserController, getUserInfoByUserId, loginController, updatePassword, updateProfile, verifyUserController } from '../controllers/authController.js';
 import { isAdmin, isAuthenticate } from '../helper/middleware.js';
 import { ApproveDoctorsProfile, getAllDoctors } from '../controllers/doctorController.js';
-import { handleFileUpload } from '../helper/Cloudinary.js';
-import multer from 'multer';
+import  Singleupload  from '../helper/Cloudinary.js';
 const router = express.Router();
 
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
-// const upload = multer({ storage: storage, limits: { files: 5 } }); 
-
-// router.post('/upload-multiple', upload.array('files', 5), handleFileUpload); 
-
-// router.post('/upload', upload.single('file'), handleFileUpload);
+router.put('/updateProfile/:userId', Singleupload,isAuthenticate, updateProfile);
 
 
 router.get('/test', isAuthenticate, (req, res) => {
@@ -27,11 +20,12 @@ router.post('/login', loginController);
 router.post('/login_via_otp', OTPLoginController);
 router.post('/forgot_password', ForgotPassword);
 router.patch('/update_password', updatePassword);
+router.get('/userinfo/:userId',isAuthenticate,getUserInfoByUserId);
 
 router.get("/user-auth", isAuthenticate, (req, res) => {
     res.status(200).send({ ok: true });
 });
-router.get("/verify-email/:token", verifyUserController)
+router.get("/verify-email/:token",verifyUserController)
 
 
 

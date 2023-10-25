@@ -4,14 +4,17 @@ import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../contextApi/auth";
+import { ProgressBar } from "react-loader-spinner";
+
 
 function RegistrationForm() {
     const [auth] = useAuth();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (auth?.user) {
             navigate("/");
-        }                     //if alredy logged in then user can't access the registration
+        }                     
     }, [auth, navigate]);
 
 
@@ -30,7 +33,9 @@ function RegistrationForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { name, email, password, username } = formData;
-        console.log(name, email, password, username);
+        // console.log(name, email, password, username);
+        setLoading(true);
+
 
         try {
             const res = await axios.post("/api/v1/auth/register", {
@@ -44,10 +49,13 @@ function RegistrationForm() {
                 toast.success(res.data.message);
                 navigate("/login");
             } else {
-                // Display the error message from the server
                 toast.error(res.data.message);
+                setLoading(false);
+
             }
         } catch (error) {
+            setLoading(false);
+
             if (error.response) {
                 if (error.response.status === 400) {
                     toast.error(error.response.data.message);
@@ -158,12 +166,24 @@ function RegistrationForm() {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Register
-                    </button>
+                    {loading ? (
+                        <ProgressBar
+                            height="80"
+                            width="80"
+                            ariaLabel="progress-bar-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="progress-bar-wrapper"
+                            borderColor='#F4442E'
+                            barColor='#51E5FF'
+                        />
+                    ) : (
+                        <button
+                            type="submit"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        >
+                            Register
+                        </button>
+                    )}
                 </div>
                 <hr className="mt-3" />
                 <div className="mt-4 text-center">

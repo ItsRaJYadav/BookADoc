@@ -163,9 +163,9 @@ function App() {
                 className={room.id === selectedRoomId ? 'active' : ''}
                 onClick={() => handleRoomSelectChange({ target: { value: room.id } })}
               >
-               
+
                 <div className="user-profile flex items-center space-x-4">
-                  
+
                   <img
                     src={role !== 'doctor' ? UserImage : docImage}
                     alt={role === 'doctor' ? room.doctorName : room.patientName}
@@ -222,6 +222,9 @@ function App() {
                   className={`message ${isSender ? 'sent' : 'received'} ${isNewSender ? 'new-sender' : ''}`}
                 >
                   {msg.text}
+                  <span className="text-xs text-gray-900 ml-3">
+                    {msg.time}
+                  </span>
                 </div>
               );
             })}

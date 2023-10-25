@@ -13,7 +13,7 @@ const EmailVerify = () => {
   useEffect(() => {
     const verifyEmailUrl = async () => {
       try {
-        const url = `/api/v1/auth/verify-email/${param.token}`;
+        const url = `/api/v1/doc/verify-doctors-email/${param.token}`;
         const response = await axios.get(url);
         const responseData = response.data;
 

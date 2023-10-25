@@ -7,6 +7,9 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { generateOTP, sendOTPByEmail, registrationEmail, generateOTPforPassword } from '../helper/OTPhandler.js';
 import OTP from "../models/OTPModel.js";
+import { getDataUri } from "../helper/dataUri.js";
+
+import {cloudinary} from '../helper/Cloudinary.js';
 
 
 
@@ -15,14 +18,24 @@ export const RegisterUserController = async (req, res) => {
   try {
     const { username, email, password, name } = req.body;
 
-    const existingUser = await User.findOne({
+    const existingUserByUsername = await User.findOne({
       where: {
-        [Op.or]: [{ email }, { username }],
+        username,
       },
     });
 
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists." });
+    const existingUserByEmail = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUserByUsername && existingUserByEmail) {
+      return res.status(400).json({ message: "Username and email already exist." });
+    } else if (existingUserByUsername) {
+      return res.status(400).json({ message: "Username already exists." });
+    } else if (existingUserByEmail) {
+      return res.status(400).json({ message: "Email already exists." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,6 +70,7 @@ export const RegisterUserController = async (req, res) => {
 
 
 
+
 export const loginController = async (req, res) => {
   const { usernameOrEmail, password, role } = req.body;
 
@@ -87,13 +101,13 @@ export const loginController = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid username or email or password" });
+      return res.status(401).json({ message: "You are not a registered user please sign up first!" });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid username or email or password" });
+      return res.status(401).json({ message: "password does not matched" });
     }
 
     // Generate OTP
@@ -169,22 +183,26 @@ export const OTPLoginController = async (req, res) => {
 };
 
 
+
 export const verifyUserController = async (req, res) => {
   const token = req.params.token;
-  // console.log('Verifying user token`', token);
+  // console.log('Verifying user token', token);
 
   try {
-    const user = await User.findOne({
+    const userCheck = await User.findOne({
       where: {
         [Op.or]: [{ verificationToken: token }],
       },
     });
 
-    if (user) {
-      user.isVerified = true;
-      user.verificationToken = null;
-      await user.save();
-      res.status(200).json({ success: true, message: 'Email verified successfully' });
+    if (userCheck) {
+      if (userCheck.isVerified) {
+        res.status(200).json({ success: true, message: 'Email is already verified' });
+      } else {
+        userCheck.isVerified = true;
+        await userCheck.save();
+        res.status(200).json({ success: true, message: 'Email verified successfully' });
+      }
     } else {
       res.status(404).json({ success: false, message: 'Invalid verification token' });
     }
@@ -294,7 +312,7 @@ export const updatePassword = async (req, res) => {
       return res.status(404).json({ message: 'Invalid OTP or user not found.' });
     }
 
-    // Check if the OTP has expired (assuming you have an 'expiresAt' field in your OTP model)
+    // Check if the OTP has expired 
     const currentTime = new Date();
     if (otpRecord.expiresAt < currentTime) {
       return res.status(400).json({ message: 'OTP has expired.' });
@@ -325,12 +343,72 @@ export const updatePassword = async (req, res) => {
     user.otp = null;
     await user.save();
 
-    
+
     await otpRecord.destroy();
 
     res.status(200).json({ message: 'Password updated successfully.' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+
+
+export const getUserInfoByUserId = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await User.findOne({
+      where: { id: userId },
+      attributes: { exclude: ['password','verificationToken'] }, 
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.error('Error fetching user information:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
+
+export const updateProfile = async (req, res) => {
+  const userId = req.params.userId;
+  const { name, username } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const file = req.file;
+    
+    if (file) {
+      const fileUri = getDataUri(file);
+      const uploadResponse = await cloudinary.v2.uploader.upload(fileUri.content);
+      user.avatar = uploadResponse.secure_url;
+    }
+
+    if (name) {
+      user.name = name;
+    }
+
+    if (username) {
+      user.username = username;
+    }
+
+    await user.save();
+
+    return res.status(200).json({ message: 'Profile updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user profile with avatar:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
   }
 };

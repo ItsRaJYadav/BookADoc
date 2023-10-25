@@ -6,8 +6,9 @@ const ChatData = sequelize.define('ChatData', {
     type: DataTypes.STRING,
     unique: true,
   },
-  messages: {
-    type: DataTypes.TEXT, // Change data type to TEXT
+  messages: 
+  {
+    type: DataTypes.TEXT, 
     defaultValue: '[]',
     allowNull: false,
     get() {

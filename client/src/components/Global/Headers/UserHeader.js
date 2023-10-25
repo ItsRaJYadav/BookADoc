@@ -111,7 +111,7 @@ const Header = () => {
             </li>
             <li className="flex items-center">
               <MdMedicalServices size={18} className="mr-5" />
-              <Link to="/chat" onClick={closeMobileMenu}>chat</Link>
+              <Link to="/video_consultancy" onClick={closeMobileMenu}>video Consultancy</Link>
             </li>
             <li className="flex items-center">
               <GiPriceTag size={18} className="mr-5" />

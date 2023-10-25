@@ -1,0 +1,107 @@
+
+.doctor-details-container {
+    background-color: #f0f0f0;
+    min-height: 100vh;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Card styles */
+  .doctor-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Header styles */
+  .doctor-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 16px;
+  }
+  
+  .doctor-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .doctor-specialization {
+    font-size: 20px;
+    color: #555;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  
+  .contact-icon {
+    font-size: 18px;
+    margin-right: 8px;
+    color: #007bff;
+  }
+  
+  .contact-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 24px;
+    color: #333;
+  }
+  
+  .timing-item {
+    margin-top: 16px;
+  }
+  
+  .timing-day {
+    font-weight: bold;
+    color: #555;
+    font-size: 18px;
+  }
+  
+  .timing-slot {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #444;
+  }
+  
+  .doctor-about {
+    margin-top: 24px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #555;
+  }
+  
+  .book-appointment-btn {
+    margin-top: 32px;
+    padding: 16px 32px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    text-transform: uppercase;
+  }
+  
+  .book-appointment-btn:hover {
+    background-color: #0056b3;
+  }
+  

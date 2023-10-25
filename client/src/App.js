@@ -11,7 +11,7 @@ import DashBoard from "./components/Screen/User/DashBoard.js";
 import Appointments from "./components/Screen/User/Appointments.js";
 import UserProfile from "./components/Screen/User/UserInfo.js";
 import UserVerify from "./components/Utils/VerifyEmail.js";
-import UpdateProfile from "./components/Screen/User/UpdateProfile";
+import DocEmailVerify from "./components/Utils/DocEmailVerify";
 import ForgotPasswordPage from "./components/Utils/ForgotPassword.js";
 
 
@@ -38,11 +38,13 @@ import Notification from "./components/Screen/User/Notification.js";
 import Subscription from "./components/Screen/User/Subscription.js";
 import PrivateProfile from "./components/Screen/Doctor/PrivateProfile.js";
 import DoctorDashboard from "./components/Screen/Doctor/Dashboard.js";
+import DoctorProfileUpdate from "./components/Screen/Doctor/UpdateProfile.js";
 import DoctorSidebar from "./components/Screen/Doctor/Index.js";
 import AllAppointments from "./components/Screen/Doctor/AllAppointments.js";
 import Notifications from "./components/Screen/Doctor/Notification.js";
 import Room from "./components/Socket/Room.js";
 import VideoCall from "./components/WebRTC/VideoCall.js";
+import RoomForVideoCall from "./components/WebRTC/Room.js";
 import Success from "./components/Utils/Success.js";
 import Cancel from "./components/Utils/Cancel";
 import EditAppointment from "./components/Screen/User/EditAppointment.js";
@@ -65,7 +67,6 @@ function App() {
           <Route path="notifications" element={<Notification />} />
           <Route path="chat_to_doctor" element={<Room />} />
           <Route path="subscription" element={<Subscription />} />
-          <Route path="updateProfile/:id" element={<UpdateProfile />} />
          
         </Route>
 
@@ -79,6 +80,7 @@ function App() {
           <Route path="allappointments" element={<AllAppointments />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="chat_to_user" element={<Room />} />
+          <Route path="updateProfile/:doctorId" element={<DoctorProfileUpdate/>} />
         </Route>
 
         {/* Protected routes for admin */}
@@ -89,7 +91,8 @@ function App() {
 
         </Route>
 
-
+        <Route path="/room/:roomID" element={<RoomForVideoCall />} />
+   
 
         <Route path="/alldoctors" element={<AllDoctors />} />
         <Route path="/doctor-profile/:doctorId" element={<DoctorProfile />} />
@@ -97,6 +100,7 @@ function App() {
         <Route path="/video_consultancy" element={<VideoCall />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/verify-email/:token" element={<UserVerify />} exact />
+        <Route path="/verify-doctors-email/:token" element={<DocEmailVerify />} exact />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />

@@ -89,11 +89,11 @@ const Index = () => {
             <Link to='/user/profile' className="flex items-center gap-x-2">
               <img
                 className="object-cover rounded-full h-7 w-7"
-                src="https://rajydv.vercel.app/static/media/Hero.540fddaef6975d508300.webp"
+                src={auth?.user?.avatar}
                 alt="avatar"
               />
               <span className="text-sm font-medium text-gray-700 ">
-              {auth?.user?.username}
+              @{auth?.user?.username}
               </span>
             </Link>
             <button 

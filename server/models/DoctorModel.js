@@ -2,17 +2,21 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/Db.js';
 
 const DoctorModel = sequelize.define('Doctor', {
-  
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
   username: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     unique: true,
   },
   Name: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  
+
   phone: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -31,13 +35,13 @@ const DoctorModel = sequelize.define('Doctor', {
   },
   avatar: {
     type: DataTypes.STRING,
-    defaultValue:"https://img.freepik.com/premium-vector/avatar-bearded-doctor-doctor-with-stethoscope-vector-illustrationxa_276184-31.jpg"
+    defaultValue: "https://img.freepik.com/premium-vector/avatar-bearded-doctor-doctor-with-stethoscope-vector-illustrationxa_276184-31.jpg"
   },
   website: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
   },
   address: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   specialization: {
@@ -53,12 +57,21 @@ const DoctorModel = sequelize.define('Doctor', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.STRING,
-    defaultValue: 'Not Available',
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
-  timings: {
-    type: DataTypes.JSON,
+  timings: 
+  {
+    type: DataTypes.TEXT, 
+    defaultValue: '[]',
     allowNull: false,
+    get() {
+      const timings = this.getDataValue('timings');
+      return timings ? JSON.parse(timings) : [];
+    },
+    set(timings) {
+      this.setDataValue('timings', JSON.stringify(timings));
+    },
   },
   gender: {
     type: DataTypes.STRING,
@@ -76,9 +89,13 @@ const DoctorModel = sequelize.define('Doctor', {
     type: DataTypes.STRING,
   },
   languagesSpoken: {
-    type: DataTypes.STRING, 
+    type: DataTypes.STRING,
   },
   isVerifiedByAdmin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  isVideoConsultant: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
@@ -86,7 +103,19 @@ const DoctorModel = sequelize.define('Doctor', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
-}, {
+  verificationToken: {
+    type: DataTypes.STRING, 
+    allowNull: true, 
+  },
+  isVerified: {
+    type: DataTypes.STRING, 
+    defaultValue: false,
+  },
+
+
+}, 
+
+{
   timestamps: true,
 });
 

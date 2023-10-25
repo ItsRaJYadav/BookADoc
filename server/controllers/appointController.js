@@ -3,6 +3,7 @@ import Appointment from '../models/Appointment.js';
 import Room from '../models/RoomModel.js';
 import { v4 as uuidv4 } from "uuid";
 import Stripe from 'stripe';
+import getRawBody from "raw-body";
 
 const stripe = new Stripe(process.env.Stripe_Key);
 
@@ -11,9 +12,9 @@ export const createAppointment = async (req, res) => {
   try {
     const { AppointmentDetails } = req.body;
 
-    console.log(AppointmentDetails);
+    // console.log(AppointmentDetails);
 
-    const firstAppointment = AppointmentDetails[0]; 
+    const firstAppointment = AppointmentDetails[0];
 
     const userId = firstAppointment.userId;
     const doctorId = firstAppointment.doctorId;
@@ -48,7 +49,7 @@ export const createAppointment = async (req, res) => {
       cancel_url: `${process.env.BASE_URL}/cancel`,
     });
 
-    
+
 
     const appointment = await Appointment.create({
       userId,
@@ -95,13 +96,41 @@ export const createAppointment = async (req, res) => {
       id: session.id
 
     });
-    
+
   } catch (error) {
     console.error("Error creating session:", error);
     res.status(500).json({ error: "Failed to create session" });
   }
 }
 
+//webhook session for testing stripe API
+const endpointSecret = "whsec_94c780ed8f2f76e39befa35eb9c228c6c4bb27c41d68ba5c43e75e6d19f487d9";
+
+export const webhookSession = async (req, res) => {
+  try {
+    const rawBody = await getRawBody(req);
+    const signature = req.headers["stripe-signature"];
+
+    const event = stripe.webhooks.constructEvent(
+      rawBody,
+      signature,
+      endpointSecret
+    );
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+
+      const line_items = await stripe.checkout.sessions.listLineItems(
+        event.data.object.id
+      );
+      console.log(line_items);
+      res.status(201).json({ success: true });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 
 
 
@@ -158,10 +187,10 @@ export const getAppointmentsByDocId = async (req, res) => {
 
 export const updateAppointment = async (req, res) => {
   const { appointmentId } = req.params;
-  const { date, time, subject } = req.body; 
+  const { date, time, subject } = req.body;
 
   try {
-    
+
     const appointment = await Appointment.findByPk(appointmentId);
 
     if (!appointment) {

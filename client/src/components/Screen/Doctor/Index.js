@@ -27,7 +27,7 @@ const Index = () => {
           <div className="flex flex-col items-center mt-6 -mx-2">
             <img
               className="object-cover w-24 h-24 mx-2 rounded-full"
-              src="https://rajydv.vercel.app/static/media/Hero.540fddaef6975d508300.webp"
+              src={auth?.user?.avatar}
               alt="avatar"
             />
             <h4 className="mx-2 mt-2 font-medium text-gray-800 ">
@@ -84,12 +84,12 @@ const Index = () => {
               <div className="flex items-center justify-between mt-6">
                 <a href="#" className="flex items-center gap-x-2">
                   <img
-                    className="object-cover rounded-full h-7 w-7"
-                    src="https://rajydv.vercel.app/static/media/Hero.540fddaef6975d508300.webp"
+                    className="object-cover rounded-full h-8 w-8"
+                    src={auth?.user?.avatar}
                     alt="avatar"
                   />
-                  <span className="text-sm font-medium text-gray-700 ">
-                    {auth?.user?.username}
+                  <span className="text-lg font-medium text-gray-700 ">
+                    @{auth?.user?.username}
                   </span>
                 </a>
                 <button

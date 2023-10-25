@@ -19,17 +19,16 @@ const Review = sequelize.define('Review', {
       },
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
       allowNull: false,
     },
     doctorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, 
       allowNull: false,
     },
   });
   
-  
-  sequelize.sync()
+sequelize.sync()
     .then(() => {
       console.log('Review table created successfully.');
     })

@@ -23,7 +23,7 @@ export const generateOTP = async (email) => {
 };
 
 export const generateOTPforPassword = async (email, role) => {
-  console.log(email,role);
+  // console.log(email,role);
   try {
     const otpCode = Math.floor(100000 + Math.random() * 900000);
     const otpData = new OTP({
@@ -42,8 +42,8 @@ export const generateOTPforPassword = async (email, role) => {
 };
 
 export const sendOTPByEmail = async (email, otpCode) => {
-  console.log(email, otpCode);
-  console.log(process.env.SMPT_MAIL);
+  // console.log(email, otpCode);
+  // console.log(process.env.SMPT_MAIL);
 
   try {
     const mailOptions = {
@@ -68,8 +68,8 @@ export const sendOTPByEmail = async (email, otpCode) => {
 export const ApproveByAdminTeam = async (doctorName, email) => {
   console.log(email);
   // console.log(process.env.SMPT_MAIL);
-  console.log(email);
-  console.log(doctorName);
+  // console.log(email);
+  // console.log(doctorName);
 
   try {
     const mailOptions = {
@@ -106,7 +106,7 @@ export const registrationEmail = async (username, email, verificationToken, base
       subject: 'Email Verification',
       html: `
         <div style="background-color: #f7f7f7; padding: 20px; border-radius: 5px; font-family: Arial, sans-serif; color: #333; font-size: 16px;">
-          <h2 style="color: #4caf50;">Welcome to Our Website</h2>
+          <h2 style="color: #4caf50;">Welcome to the Community</h2>
           <p>Dear ${username},</p>
           <p>Thank you for registering with us. Please verify your email address to complete your registration:</p>
           <div style="text-align: center; margin-top: 30px;">
@@ -114,6 +114,37 @@ export const registrationEmail = async (username, email, verificationToken, base
           </div>
           <p>If the button above does not work, you can also copy and paste the following URL into your web browser:</p>
           <p style="font-size: 14px; color: #555; padding: 10px 0;">${baseUrl}/verify-email/${verificationToken}</p>
+          <p style="font-size: 14px; color: #555;">Thank you for choosing our platform. We look forward to serving you!</p>
+        </div>
+      `,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+
+    return true;
+  } catch (error) {
+    console.error('Error sending registration email:', error);
+    return false;
+  }
+};
+
+export const verifyEmailForDoctor = async (username, email, verificationToken, baseUrl) => {
+  try {
+    const mailOptions = {
+      from: process.env.SMPT_MAIL,
+      to: email,
+      subject: 'Email Verification',
+      html: `
+        <div style="background-color: #f7f7f7; padding: 20px; border-radius: 5px; font-family: Arial, sans-serif; color: #333; font-size: 16px;">
+          <h2 style="color: #4caf50;">Welcome to Our Website</h2>
+          <p>Dear ${username},</p>
+          <p>Thank you for registering with us. Please verify your email address to complete your registration:</p>
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="${baseUrl}/verify-doctors-email/${verificationToken}" style="background-color: #4caf50; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; cursor: pointer;">Verify Email</a>
+          </div>
+          <p>If the button above does not work, you can also copy and paste the following URL into your web browser:</p>
+          <p style="font-size: 14px; color: #555; padding: 10px 0;">${baseUrl}/verify-doctors-email/${verificationToken}</p>
           <p style="font-size: 14px; color: #555;">Thank you for choosing our platform. We look forward to serving you!</p>
         </div>
       `,
