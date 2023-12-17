@@ -8,8 +8,9 @@ const Appointment = sequelize.define('Appointment', {
     primaryKey: true,
   },
   userId: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING(255), 
     allowNull: false,
+    unique: true,
   },
   doctorId: {
     type: DataTypes.UUID,

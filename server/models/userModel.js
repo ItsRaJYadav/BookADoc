@@ -8,7 +8,7 @@ const User = sequelize.define('User', {
     primaryKey: true,
   },
   username: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255), 
     allowNull: false,
     unique: true,
   },
@@ -21,7 +21,7 @@ const User = sequelize.define('User', {
     defaultValue:"https://img.freepik.com/premium-vector/business-global-economy_24877-41082.jpg"
   },
   email: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255), 
     allowNull: false,
     unique: true,
     validate: {

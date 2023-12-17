@@ -8,7 +8,7 @@ const DoctorModel = sequelize.define('Doctor', {
     primaryKey: true,
   },
   username: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(255),
     allowNull: false,
     unique: true,
   },
@@ -16,7 +16,6 @@ const DoctorModel = sequelize.define('Doctor', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-
   phone: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -35,7 +34,7 @@ const DoctorModel = sequelize.define('Doctor', {
   },
   avatar: {
     type: DataTypes.STRING,
-    defaultValue: "https://img.freepik.com/premium-vector/avatar-bearded-doctor-doctor-with-stethoscope-vector-illustrationxa_276184-31.jpg"
+    defaultValue: 'https://img.freepik.com/premium-vector/avatar-bearded-doctor-doctor-with-stethoscope-vector-illustrationxa_276184-31.jpg',
   },
   website: {
     type: DataTypes.TEXT,
@@ -60,9 +59,8 @@ const DoctorModel = sequelize.define('Doctor', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
-  timings: 
-  {
-    type: DataTypes.TEXT, 
+  timings: {
+    type: DataTypes.TEXT,
     defaultValue: '[]',
     allowNull: false,
     get() {
@@ -104,27 +102,23 @@ const DoctorModel = sequelize.define('Doctor', {
     defaultValue: true,
   },
   verificationToken: {
-    type: DataTypes.STRING, 
-    allowNull: true, 
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   isVerified: {
-    type: DataTypes.STRING, 
+    type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-
-
-}, 
-
-{
+}, {
   timestamps: true,
 });
 
 sequelize.sync()
   .then(() => {
-    console.log('Doctor model synchronized with database.');
+    console.log('Doctor model synchronized with the database.');
   })
   .catch((error) => {
-    console.error('Error synchronizing Doctor model: ', error);
+    console.error('Error synchronizing Doctor model:', error);
   });
 
 export default DoctorModel;
